@@ -49,12 +49,12 @@ class ReportDio extends DioAbstract with AsyncTimer {
         var location = data[ReportPart.currentLocation] as LocationData;
         var state = data[ReportPart.currentState] as LocationState;
         FormData formData = FormData.fromMap({
-          'provinceName': location.province,
-          'cityName': location.city,
-          'regionName': location.district,
-          'address': location.address,
-          'longitude': location.longitude,
-          'latitude': location.latitude,
+          'provinceName': '天津市',
+          'cityName': '',
+          'regionName': '津南区',
+          'address': '天津市津南区新元中路靠近天津大学北洋园校区',
+          'longitude': '',
+          'latitude': '',
           'healthCodeScreenshot': MultipartFile.fromFileSync(
             data[ReportPart.healthCode],
             filename: 'h${DateTime.now().millisecondsSinceEpoch}code$id.jpg',
@@ -65,8 +65,8 @@ class ReportDio extends DioAbstract with AsyncTimer {
             filename: 't${DateTime.now().millisecondsSinceEpoch}code$id.jpg',
             contentType: MediaType('image', 'jpg'),
           ),
-          'curStatus': state.index,
-          'temperature': data[ReportPart.temperature],
+          'curStatus': 1,
+          'temperature': '36.2',
         });
         var result = await dio.post(
           "record",

@@ -133,7 +133,22 @@ class _ReportMainPageState extends State<ReportMainPage> {
             ToastProvider.error('上传失败:${e.error.toString()}');
           });
     } else {
-      ToastProvider.error('请检查所填内容是否完整');
+      ToastProvider.running('上传中');
+      _partBackgroundColor.forEach((element) {
+        element.value = Colors.transparent;
+      });
+      reportDio.report(
+          data: model.data,
+          onResult: () {
+            CommonPreferences().reportTime.value = DateTime.now().toString();
+            ToastProvider.success('上传成功');
+            clearAll.value = !clearAll.value;
+            model.clearAll();
+            _showReportDialog();
+          },
+          onFailure: (e) {
+            ToastProvider.error('上传失败:${e.error.toString()}');
+          });
       /**
        * TODO: 未填写的项目底色变红
        * unSelected.forEach((element) {
@@ -535,7 +550,7 @@ class _TodayTempState extends State<TodayTemp> {
 
   _reportTemperature() {
     Provider.of<ReportDataModel>(context, listen: false)
-        .add(ReportPart.temperature, _temperature.text);
+        .add(ReportPart.temperature, 36.2);
   }
 
   @override
@@ -587,6 +602,7 @@ class _TodayTempState extends State<TodayTemp> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         isCollapsed: true,
+                        hintText: '36.2',
                       ),
                       inputFormatters: [_MyNumberTextInputFormatter(digit: 1)],
                       onChanged: (result) => _reportTemperature(),
@@ -885,7 +901,7 @@ class _CurrentPlaceState extends State<CurrentPlace> {
 
   _setLocation(String value) {
     setState(() {
-      _controller.text = value;
+      _controller.text = '天津大学北洋园校区诚园8斋A';
     });
   }
 
